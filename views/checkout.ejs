@@ -53,7 +53,7 @@
                                         <h6 class="my-0"><%= item.name %></h6>
                                         <small class="text-muted">Qty: <%= item.quantity %></small>
                                     </div>
-                                    <span class="text-muted">$<%= (item.price * item.quantity).toFixed(2) %></span>
+                                    <span class="text-muted">€<%= (item.price * item.quantity).toFixed(2) %></span>
                                 </li>
                             <% }); %>
                             
@@ -64,9 +64,9 @@
                             
                             <li class="list-group-item d-flex justify-content-between bg-light">
                                 <div class="text-success">
-                                    <h6 class="my-0">Total (USD)</h6>
+                                    <h6 class="my-0">Total (EUR)</h6>
                                 </div>
-                                <span class="text-success"><strong>$<%= total %></strong></span>
+                                <span class="text-success"><strong>€<%= total %></strong></span>
                             </li>
                         </ul>
                         
@@ -113,7 +113,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label for="zip" class="form-label">Zip Code</label>
+                            <label for="zip" class="form-label">Postal Code</label>
                             <input type="text" class="form-control" id="zip" name="zip" required>
                         </div>
                         
@@ -134,14 +134,8 @@
 
                     <hr class="my-4">
 
-                    <!-- Payment Simulation -->
-                    <div class="alert alert-info">
-                        <strong>💳 Payment Simulation</strong><br>
-                        This is a demo checkout. No actual payment will be processed.
-                    </div>
-
                     <button class="w-100 btn btn-success btn-lg" type="submit">
-                        🛒 Place Order (Demo)
+                         Place Order 
                     </button>
                 </form>
             </div>

@@ -4,6 +4,9 @@ const mysql = require('mysql');
 const session = require('express-session');
 const app = express();
 
+const CartManager = require('./cartModule');
+
+
 // Set view engine to EJS
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -39,7 +42,11 @@ connection.connect((err) => {
         console.log('Connected to the database');
     }
 });
+// Initialize cart manager with database connection
+const cartManager = new CartManager(connection);
 
+// Quick test - add this line to verify it's working
+console.log('CartManager initialized:', typeof cartManager);
 // Routes
 
 // Home page route
@@ -276,7 +283,109 @@ app.post('/squad-signup', (req, res) => {
         `);
     });
 });
+// ======= CART ROUTES USING CUSTOM MODULE =======
 
+// Add to cart using custom module
+app.post('/cart/add', async (req, res) => {
+    try {
+        const { productId, quantity } = req.body;
+        const result = await cartManager.addToCart(req.session, productId, quantity);
+        res.json(result);
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
+
+// Get cart count
+app.get('/cart/count', (req, res) => {
+    const count = cartManager.getCartCount(req.session);
+    res.json({ count: count });
+});
+
+// View cart
+app.get('/cart', (req, res) => {
+    const cartItems = cartManager.getCartItems(req.session);
+    const total = cartManager.getCartTotal(req.session);
+    
+    res.render('cart', {
+        cartItems: cartItems,
+        total: total.toFixed(2)
+    });
+});
+
+// Remove from cart
+app.post('/cart/remove', (req, res) => {
+    const { productId } = req.body;
+    cartManager.removeFromCart(req.session, productId);
+    res.redirect('/cart');
+});
+
+// Update cart
+app.post('/cart/update', (req, res) => {
+    const { productId, quantity } = req.body;
+    cartManager.updateCartItem(req.session, productId, quantity);
+    res.redirect('/cart');
+});
+
+// Checkout page
+app.get('/checkout', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    
+    const cartItems = cartManager.getCartItems(req.session);
+    
+    if (cartItems.length === 0) {
+        return res.redirect('/cart');
+    }
+    
+    const total = cartManager.getCartTotal(req.session);
+    
+    res.render('checkout', {
+        cartItems: cartItems,
+        total: total.toFixed(2),
+        user: req.session.user
+    });
+});
+
+// Process order using custom module
+app.post('/place-order', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    
+    const orderData = {
+        address: req.body.address,
+        city: req.body.city,
+        state: req.body.state,
+        zip: req.body.zip,
+        phone: req.body.phone,
+        notes: req.body.notes
+    };
+    
+    const result = cartManager.processOrder(req.session, req.session.user, orderData);
+    
+    if (!result.success) {
+        const cartItems = cartManager.getCartItems(req.session);
+        const total = cartManager.getCartTotal(req.session);
+        
+        return res.render('checkout', {
+            cartItems: cartItems,
+            total: total.toFixed(2),
+            user: req.session.user,
+            error: result.message
+        });
+    }
+    
+    // Success - show order confirmation
+    res.render('order-success', {
+        orderNumber: result.orderNumber,
+        total: result.total,
+        orderSummary: result.orderSummary,
+        shippingAddress: result.shippingAddress,
+        user: req.session.user
+    });
+});
 // Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy((err) => {

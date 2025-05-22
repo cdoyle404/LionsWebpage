@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Complete</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="/assets/Lionscrest.jpg" alt="" width="60" height="48">
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Store</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card border-success">
+                    <div class="card-header bg-success text-white text-center">
+                        <h2 class="mb-0">Order Complete!</h2>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-4">
+                            <div class="display-1 text-success mb-3">✓</div>
+                            <h3>Thank you for your order, <%= user.name %>!</h3>
+                            <p class="lead">Your demo order has been successfully placed.</p>
+                        </div>
+
+                        <div class="bg-light p-4 rounded mb-4">
+                            <h5>Order Details</h5>
+                            <div class="row text-start">
+                                <div class="col-sm-6">
+                                    <p><strong>Order Number:</strong><br>#<%= orderNumber %></p>
+                                    <p><strong>Customer:</strong><br><%= user.name %></p>
+                                    <p><strong>Email:</strong><br><%= user.email %></p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p><strong>Total Amount:</strong><br>€<%= total %></p>
+                                    <p><strong>Items Ordered:</strong><br><%= orderSummary %></p>
+                                    <p><strong>Shipping To:</strong><br><%= shippingAddress %></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="/products" class="btn btn-primary me-2">Continue Shopping</a>
+                            <a href="/" class="btn btn-outline-secondary">Go to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+ 

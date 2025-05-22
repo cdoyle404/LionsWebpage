@@ -27,32 +27,29 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">
-                <img src="assets/Lionscrest.jpg" alt="" width="60" height="48">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/products">Store</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/checkout">Checkout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+   <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"></a>
+    <img src="assets/Lionscrest.jpg" alt="" width="60" height="48">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="Homepage.html">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/products">Store</a>
+        </li>
+        <li class="nav-item">
+    <a class="nav-link" href="/cart">Cart</a>
+</li>
+      </ul>
+      
+    </div>
+  </div>
+</nav>
 
     <div class="container mt-4">
         <h1>Product Store</h1>
@@ -128,7 +125,7 @@
                                 
                                 <div class="mt-auto">
                                     <p class="card-text">
-                                        <strong class="text-success fs-5">$<%= product.Price %></strong>
+                                        <strong class="text-success fs-5">€<%= product.Price %></strong>
                                     </p>
                                     <a href="/product/<%= product.ID %>" class="btn btn-primary w-100">View Details</a>
                                 </div>

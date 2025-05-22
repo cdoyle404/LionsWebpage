@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="/assets/Lionscrest.jpg" alt="" width="60" height="48">
+            </a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">Store</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/cart">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Your Shopping Cart</h1>
+        
+        <% if (cartItems.length > 0) { %>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% cartItems.forEach(function(item) { %>
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="/<%= item.image %>" alt="<%= item.name %>" class="cart-item-image me-3">
+                                        <div>
+                                            <h6 class="mb-0"><%= item.name %></h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>€<%= item.price %></td>
+                                <td>
+                                    <form action="/cart/update" method="POST" class="d-inline">
+                                        <input type="hidden" name="productId" value="<%= item.id %>">
+                                        <input type="number" name="quantity" value="<%= item.quantity %>" min="1" max="10" class="form-control" style="width: 80px; display: inline;" onchange="this.form.submit()">
+                                    </form>
+                                </td>
+                                <td>€<%= (item.price * item.quantity).toFixed(2) %></td>
+                                <td>
+                                    <form action="/cart/remove" method="POST" class="d-inline">
+                                        <input type="hidden" name="productId" value="<%= item.id %>">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Remove this item?')">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td><strong>€<%= total %></strong></td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <a href="/products" class="btn btn-outline-primary">Continue Shopping</a>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="/checkout" class="btn btn-success btn-lg">Proceed to Checkout</a>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="alert alert-info">
+                <h4>Your cart is empty</h4>
+                <p>Browse our products and add something to your cart!</p>
+                <a href="/products" class="btn btn-primary">Shop Now</a>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
