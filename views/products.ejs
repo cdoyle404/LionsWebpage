@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .filter-section {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .product-card {
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="assets/Lionscrest.jpg" alt="" width="60" height="48">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/products">Store</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1>Product Store</h1>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h5>Filter Products</h5>
+            <form method="GET" action="/products" class="row g-3">
+                <div class="col-md-4">
+                    <label for="typeFilter" class="form-label">Type:</label>
+                    <select class="form-select" id="typeFilter" name="type" onchange="this.form.submit()">
+                        <option value="all" <%= selectedType === 'all' ? 'selected' : '' %>>All Types</option>
+                        <% types.forEach(function(type) { %>
+                            <option value="<%= type.Type %>" <%= selectedType === type.Type ? 'selected' : '' %>>
+                                <%= type.Type %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="genderFilter" class="form-label">Gender:</label>
+                    <select class="form-select" id="genderFilter" name="gender" onchange="this.form.submit()">
+                        <option value="all" <%= selectedGender === 'all' ? 'selected' : '' %>>All Genders</option>
+                        <% genders.forEach(function(gender) { %>
+                            <option value="<%= gender.Gender %>" <%= selectedGender === gender.Gender ? 'selected' : '' %>>
+                                <%= gender.Gender %>
+                            </option>
+                        <% }); %>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+                    <a href="/products" class="btn btn-outline-secondary">Clear All</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Products Results -->
+        <div class="mb-3">
+            <h5>Showing <%= products.length %> product(s)</h5>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="row">
+            <% if (products.length > 0) { %>
+                <% products.forEach(function(product, index) { %>
+                    <div class="col-md-4 mb-4">
+                        <div class="card product-card h-100">
+                            <!-- Dynamic Image Loading -->
+                            <img src="<%= product.Image %>" 
+                                 alt="<%= product.Name %>" 
+                                 class="card-img-top product-image"
+                                 onerror="this.src='assets/placeholder.jpg'">
+                            
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><%= product.Name %></h5>
+                                
+                                <!-- Product Details -->
+                                <div class="mb-2">
+                                    <% if (product.Type) { %>
+                                        <span class="badge bg-primary me-1"><%= product.Type %></span>
+                                    <% } %>
+                                    <% if (product.Gender) { %>
+                                        <span class="badge bg-secondary"><%= product.Gender %></span>
+                                    <% } %>
+                                </div>
+                                
+                                <p class="card-text flex-grow-1">
+                                    Product ID: <%= product.ID %>
+                                </p>
+                                
+                                <div class="mt-auto">
+                                    <p class="card-text">
+                                        <strong class="text-success fs-5">$<%= product.Price %></strong>
+                                    </p>
+                                    <a href="/product/<%= product.ID %>" class="btn btn-primary w-100">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        <h4>No products found</h4>
+                        <p>Try adjusting your filters or <a href="/products">view all products</a>.</p>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
